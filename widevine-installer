@@ -101,8 +101,6 @@ echo "itself will not be modified in any way."
 echo
 echo "Widevine version to be installed: $WIDEVINE_VERSION"
 echo
-echo "Press enter to proceed, or Ctrl-C to cancel."
-read dummy
 
 workdir="$(mktemp -d /tmp/widevine-installer.XXXXXXXX)"
 [ -z "$workdir" ] && exit 1 # sanity check
@@ -113,7 +111,7 @@ cd "$workdir"
 echo "Downloading LaCrOS (Chrome) image..."
 URL="$DISTFILES_BASE/$LACROS_NAME-$LACROS_VERSION"
 echo "URL: $URL"
-curl -# -o lacros.squashfs "$URL"
+wget -O lacros.squashfs "$URL"
 
 echo
 echo "Extracting Widevine..."
@@ -126,8 +124,6 @@ echo ===========================================================================
 cat squashfs-root/WidevineCdm/LICENSE
 echo ===================================================================================
 echo
-echo "Press enter to proceed, or Ctrl-C to cancel."
-read dummy
 
 python3 "$SCRIPT_BASE/widevine_fixup.py" squashfs-root/WidevineCdm/_platform_specific/cros_arm64/libwidevinecdm.so libwidevinecdm.so
 
