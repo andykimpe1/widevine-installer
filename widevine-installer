@@ -27,8 +27,10 @@ INSTALL_BASE=$STATEDIR/widevine
 DISTFILES_BASE=https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles
 if [ "$(uname -m)" == "aarch64" ]; then
 LACROS_NAME=chromeos-lacros-arm64-squash-zstd
+ARCHDIR=WidevineCdm/_platform_specific/cros_arm64
 elif [ "$(uname -m)" == "x86_64" ]; then
 LACROS_NAME=chromeos-lacros-amd64-squash-zstd
+ARCHDIR=WidevineCdm/_platform_specific/linux_x64
 else
     echo "This tool is only supported on aarch64 (ARM64) or x86_64 (AMD64) systems."
     exit 1
@@ -125,7 +127,9 @@ cat squashfs-root/WidevineCdm/LICENSE
 echo ===================================================================================
 echo
 
-python3 "$SCRIPT_BASE/widevine_fixup.py" squashfs-root/WidevineCdm/_platform_specific/cros_arm64/libwidevinecdm.so libwidevinecdm.so
+
+
+python3 "$SCRIPT_BASE/widevine_fixup.py" squashfs-root/$ARCHDIR/libwidevinecdm.so libwidevinecdm.so
 
 echo
 echo "Installing..."
@@ -140,10 +144,12 @@ ln -sf ../../manifest.json "$INSTALL_BASE"/gmp-widevinecdm/system-installed/
 ln -sf ../../libwidevinecdm.so "$INSTALL_BASE"/gmp-widevinecdm/system-installed/
 mkdir -p "$INSTALL_BASE"/WidevineCdm/_platform_specific/linux_arm64
 mkdir -p "$INSTALL_BASE"/WidevineCdm/_platform_specific/linux_x64
+mkdir -p "$INSTALL_BASE"/$ARCHDIR
 # Hack because Chromium hardcodes a check for this right now...
-touch "$INSTALL_BASE"/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
+rm -f "$INSTALL_BASE"/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
 ln -sf ../manifest.json "$INSTALL_BASE"/WidevineCdm
 ln -sf ../../../libwidevinecdm.so "$INSTALL_BASE"/WidevineCdm/_platform_specific/linux_arm64/
+ln -sf ../../../libwidevinecdm.so "$INSTALL_BASE"/$ARCHDIR
 
 if [ "$COPY_CONFIGS" = 1 ]; then
     install_configs
