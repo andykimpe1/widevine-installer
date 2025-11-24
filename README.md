@@ -1,4 +1,4 @@
-# Widevine installer for aarch64 systems
+# Widevine installer for aarch64 and amd64 systems
 
 This tool will download and install Widevine systemwide for aarch64 systems.
 It performs the necessary configuration changes to make Widevine available for
