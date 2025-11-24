@@ -110,8 +110,6 @@ cd "$workdir"
 
 echo "Downloading LaCrOS (Chrome) image..."
 URL="$DISTFILES_BASE/$LACROS_NAME-$LACROS_VERSION"
-mkdir -p SCRIPT_BASE
-cd SCRIPT_BASE
 echo "URL: $URL"
 wget -O lacros.squashfs "$URL"
 
